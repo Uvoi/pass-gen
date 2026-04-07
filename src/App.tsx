@@ -3,6 +3,7 @@ import './App.css'
 import { Input } from './components/Input/Input'
 import { Button } from './components/Button/Button';
 import { getPassword } from './components/Generate/generate';
+import { X } from 'lucide-react';
 
 function App() {
 
@@ -35,6 +36,14 @@ function App() {
   const masterKeyError = masterKey.length > 0 && (masterKey.includes(' ') || masterKey.length < 6);
   const keyError = key.length > 0 && (key.includes(' ') || key.length < 2);
 
+  const handleReset = () =>
+  {
+    setMasterKey('');
+    setKey('');
+    setTag('');
+    setPassword('');
+  }
+
   return (
     <div className="bg-[#000000] min-h-screen w-full flex flex-col gap-12 justify-center p-8">
       <div className='w-full flex flex-col gap-6 justify-center'>
@@ -58,9 +67,15 @@ function App() {
           placeholder='Tag'
         />
       </div>
-      <Button onClick={generatePassword}>
-        Generate
-      </Button>
+
+      <div className='flex gap-2 w-full'>
+        <Button onClick={handleReset} className='w-fit bg-red-400'>
+          <X height={30} width={30}/>
+        </Button>
+        <Button onClick={generatePassword} className='w-full'>
+          Generate
+        </Button>
+      </div>
 
       <Input
         value={password}
