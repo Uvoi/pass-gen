@@ -2,7 +2,8 @@ import { useRef, useState } from 'react'
 import './App.css'
 import { Input } from './components/Input/Input'
 import { Button } from './components/Button/Button';
-import { getPassword } from './components/Generate/generate';
+import GenerateWorker from './components/Generate/generate.worker.ts?worker';
+import type { ArgonParams } from './components/Generate/generate';
 import { Eye, X } from 'lucide-react';
 import { defaultSettings, SettingsModal } from './components/Modal/SettingsModal';
 import type { GenerateSettings } from './components/Modal/SettingsModal';
@@ -45,7 +46,14 @@ function App() {
       return;
     }
     setLoading(true);
-    const pass = await getPassword(masterKey, key, tag, settings);
+    const pass = await new Promise<string>((resolve) => {
+      const worker = new GenerateWorker();
+      worker.onmessage = (e: MessageEvent<string>) => {
+        resolve(e.data);
+        worker.terminate();
+      };
+      worker.postMessage({ masterKey, key, tag, params: settings } satisfies { masterKey: string; key: string; tag: string; params: ArgonParams });
+    });
     setLoading(false);
     setErrorMsg('');
     if (errorTimer.current) clearTimeout(errorTimer.current);
