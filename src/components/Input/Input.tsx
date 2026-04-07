@@ -40,7 +40,7 @@ export const Input = (props: InputProps) =>
                 type={inputType} 
                 value={value} 
                 placeholder={placeholder}
-                onChange={e => onChange(e.target.value)}
+                onChange={e => onChange?.(e?.target.value)}
                 disabled={disabled}
             />      
                 

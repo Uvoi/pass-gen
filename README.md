@@ -1,4 +1,4 @@
-# 🔐 Password Generator
+# Password Generator
 
 A stateless password generator that derives unique, reproducible passwords from a **master password**, **key**, and optional **tag**.
 
