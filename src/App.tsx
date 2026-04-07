@@ -31,6 +31,7 @@ function App() {
   {
     const pass = await getPassword(masterKey, key, tag);
     setPassword(pass);
+    setTimeout(() => setPassword(''), 30_000);
   }
 
   const masterKeyError = masterKey.length > 0 && (masterKey.includes(' ') || masterKey.length < 6);

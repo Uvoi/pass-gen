@@ -1,6 +1,6 @@
 import { argon2id } from "hash-wasm";
 
-const getNormalized = (value: string) => (value.trim().toLowerCase());
+const getNormalized = (value: string) => (value.trim());
 
 const getSalt = (normalizedKey: string, tag: string) => (`${normalizedKey}:${tag || 'default'}:v1`);
 
@@ -18,11 +18,14 @@ const getHash = async (masterKey: string, salt: string) =>
 const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
 
 function mapToCharset(bytes: Uint8Array, length: number) {
+    const limit = 256 - (256 % charset.length);
     let result = "";
+    let i = 0;
 
-    for (let i = 0; i < length; i++) {
-        const byte = bytes[i];
+    for (const byte of bytes) {
+        if (byte >= limit) continue;
         result += charset[byte % charset.length];
+        if (++i === length) break;
     }
 
     return result;
