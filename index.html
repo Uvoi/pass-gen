@@ -4,12 +4,22 @@
     <meta charset="UTF-8" />
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; object-src 'none'" />
     <link rel="icon" type="image/svg+xml" href="/pass-gen/favicon.svg" />
+    <link rel="manifest" href="/pass-gen/manifest.json" />
+    <meta name="theme-color" content="#916b8d" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="PassGen" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>pass-gen</title>
-    <script type="module" crossorigin src="/pass-gen/assets/index-CwvQvXSn.js"></script>
-    <link rel="stylesheet" crossorigin href="/pass-gen/assets/index-BZA7IEVQ.css">
+    <script type="module" crossorigin src="/pass-gen/assets/index-dgBzMQTh.js"></script>
+    <link rel="stylesheet" crossorigin href="/pass-gen/assets/index-BbIGuS7b.css">
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/pass-gen/sw.js');
+      }
+    </script>
   </body>
 </html>
