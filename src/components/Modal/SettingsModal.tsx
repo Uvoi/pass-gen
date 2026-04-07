@@ -19,9 +19,10 @@ export const defaultSettings: GenerateSettings = {
 type SettingsModalProps = {
     settings: GenerateSettings;
     onChange: (s: GenerateSettings) => void;
+    disabled?: boolean;
 };
 
-export const SettingsModal = ({ settings, onChange }: SettingsModalProps) => {
+export const SettingsModal = ({ settings, onChange, disabled }: SettingsModalProps) => {
     const [local, setLocal] = useState(settings);
 
     const update = (key: keyof GenerateSettings, value: number) =>
@@ -35,7 +36,7 @@ export const SettingsModal = ({ settings, onChange }: SettingsModalProps) => {
     return (
         <Modal
             trigger={
-                <Button onClick={() => {}} className="w-fit bg-gray-600">
+                <Button onClick={() => {}} className="w-fit bg-gray-600" disabled={disabled}>
                     <Settings height={30} width={30} />
                 </Button>
             }

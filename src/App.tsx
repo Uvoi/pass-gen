@@ -84,28 +84,31 @@ function App() {
           type='password'
           rightAddon='visible'
           error={masterKeyError}
+          disabled={loading}
         />
         <Input
           value={key}
           onChange={handleEditKey}
           placeholder='Key*'
           error={keyError}
+          disabled={loading}
         />
         <Input
           value={tag}
           onChange={handleEditTag}
           placeholder='Tag'
+          disabled={loading}
         />
       </div>
 
       <div className='flex gap-2 w-full'>
-        <Button onClick={handleReset} className='w-fit bg-gray-600'>
+        <Button onClick={handleReset} className='w-fit bg-gray-600' disabled={loading}>
           <X height={30} width={30}/>
         </Button>
         <Button onClick={generatePassword} className='w-full'>
           {loading ? <Eye height={30} width={30} className='animate-spin' /> : errorMsg || 'Generate'}
         </Button>
-        <SettingsModal settings={settings} onChange={setSettings} />
+        <SettingsModal settings={settings} onChange={setSettings} disabled={loading} />
       </div>
 
       <Input
