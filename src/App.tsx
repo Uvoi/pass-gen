@@ -1,9 +1,11 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import './App.css'
 import { Input } from './components/Input/Input'
 import { Button } from './components/Button/Button';
 import { getPassword } from './components/Generate/generate';
-import { X } from 'lucide-react';
+import { Eye, X } from 'lucide-react';
+import { defaultSettings, SettingsModal } from './components/Modal/SettingsModal';
+import type { GenerateSettings } from './components/Modal/SettingsModal';
 
 function App() {
 
@@ -11,6 +13,8 @@ function App() {
   const [key, setKey] = useState('');
   const [tag, setTag] = useState('');
   const [password, setPassword] = useState('');
+  const [settings, setSettings] = useState<GenerateSettings>(defaultSettings);
+  const clearTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleEditMasterKey = (value: string) =>
   {
@@ -27,11 +31,27 @@ function App() {
     setTag(value);
   }
 
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+  const errorTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const generatePassword = async () =>
   {
-    const pass = await getPassword(masterKey, key, tag);
+    if (masterKeyError || keyError || !masterKey || !key) {
+      const msg = !masterKey || !key ? 'Fill fields' : 'Fix errors first';
+      setErrorMsg(msg);
+      if (errorTimer.current) clearTimeout(errorTimer.current);
+      errorTimer.current = setTimeout(() => setErrorMsg(''), 5_000);
+      return;
+    }
+    setLoading(true);
+    const pass = await getPassword(masterKey, key, tag, settings);
+    setLoading(false);
+    setErrorMsg('');
+    if (errorTimer.current) clearTimeout(errorTimer.current);
     setPassword(pass);
-    setTimeout(() => setPassword(''), 30_000);
+    if (clearTimer.current) clearTimeout(clearTimer.current);
+    clearTimer.current = setTimeout(() => setPassword(''), 30_000);
   }
 
   const masterKeyError = masterKey.length > 0 && (masterKey.includes(' ') || masterKey.length < 6);
@@ -44,6 +64,7 @@ function App() {
     setTag('');
     setPassword('');
   }
+
 
   return (
     <div className="bg-[#000000] min-h-screen w-full flex flex-col gap-12 justify-center p-8">
@@ -70,12 +91,13 @@ function App() {
       </div>
 
       <div className='flex gap-2 w-full'>
-        <Button onClick={handleReset} className='w-fit bg-red-400'>
+        <Button onClick={handleReset} className='w-fit bg-gray-600'>
           <X height={30} width={30}/>
         </Button>
         <Button onClick={generatePassword} className='w-full'>
-          Generate
+          {loading ? <Eye height={30} width={30} className='animate-spin' /> : errorMsg || 'Generate'}
         </Button>
+        <SettingsModal settings={settings} onChange={setSettings} />
       </div>
 
       <Input
@@ -92,4 +114,3 @@ function App() {
 }
 
 export default App
-

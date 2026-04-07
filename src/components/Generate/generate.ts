@@ -4,14 +4,20 @@ const getNormalized = (value: string) => (value.trim());
 
 const getSalt = (normalizedKey: string, tag: string) => (`${normalizedKey}:${tag || 'default'}:v1`);
 
-const getHash = async (masterKey: string, salt: string) => 
+export type ArgonParams = {
+    iterations: number;
+    memorySize: number;
+    hashLength: number;
+};
+
+const getHash = async (masterKey: string, salt: string, params: ArgonParams) => 
     (await argon2id({
         password: masterKey,
         salt: salt,
         parallelism: 1,
-        iterations: 3,
-        memorySize: 65536,
-        hashLength: 32,
+        iterations: params.iterations,
+        memorySize: params.memorySize,
+        hashLength: params.hashLength,
         outputType: "binary", 
     }));
 
@@ -31,7 +37,7 @@ function mapToCharset(bytes: Uint8Array, length: number) {
     return result;
 }
 
-export const getPassword = async (masterKey: string, key: string, tag: string) =>
+export const getPassword = async (masterKey: string, key: string, tag: string, params: ArgonParams) =>
 {
     const normalizedMasterKey = getNormalized(masterKey);
     const normalizedKey = getNormalized(key);
@@ -39,9 +45,9 @@ export const getPassword = async (masterKey: string, key: string, tag: string) =
 
     const salt = getSalt(normalizedKey, normalizedTag);
 
-    const hash = await getHash(normalizedMasterKey, salt);
+    const hash = await getHash(normalizedMasterKey, salt, params);
 
-    const finalPassword = mapToCharset(hash, 16);
+    const finalPassword = mapToCharset(hash, params.hashLength);
 
     return finalPassword;
 }
