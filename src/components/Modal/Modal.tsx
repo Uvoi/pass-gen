@@ -6,9 +6,10 @@ type ModalProps = {
     trigger: React.ReactNode;
     children: ((close: () => void) => React.ReactNode) | React.ReactNode;
     onOpen?: () => void;
+    disabled?: boolean;
 };
 
-export const Modal = ({ trigger, children, onOpen }: ModalProps) => {
+export const Modal = ({ trigger, children, onOpen, disabled }: ModalProps) => {
     const [open, setOpen] = useState(false);
 
     const handleOpen = () => {
@@ -20,7 +21,7 @@ export const Modal = ({ trigger, children, onOpen }: ModalProps) => {
 
     return (
         <>
-            <div onClick={handleOpen}>{trigger}</div>
+            <div onClick={disabled ? undefined : handleOpen}>{trigger}</div>
 
             {open && (
                 <div

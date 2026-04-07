@@ -41,6 +41,7 @@ export const SettingsModal = ({ settings, onChange, disabled }: SettingsModalPro
                 </Button>
             }
             onOpen={() => setLocal(settings)}
+            disabled={disabled}
         >
             {(close) => (
                 <div className="flex flex-col gap-16">
