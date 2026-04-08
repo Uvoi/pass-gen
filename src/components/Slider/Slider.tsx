@@ -10,7 +10,7 @@ type SliderProps = {
 
 export const Slider = ({ label, value, min, max, step = 1, display, onChange }: SliderProps) => (
     <div className="flex flex-col gap-2">
-        <div className="flex justify-between text-[#fff5ff]">
+        <div className="flex justify-between text-text">
             <span className="text-xl">{label}</span>
             <span className="text-xl">{display ? display(value) : value}</span>
         </div>
@@ -21,7 +21,7 @@ export const Slider = ({ label, value, min, max, step = 1, display, onChange }: 
             step={step}
             value={value}
             onChange={(e) => onChange(Number(e.target.value))}
-            className="w-full accent-[#916b8d]"
+            className="w-full accent-primary"
         />
     </div>
 );

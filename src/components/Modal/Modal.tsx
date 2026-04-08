@@ -37,13 +37,13 @@ export const Modal = ({ trigger, children, onOpen, disabled }: ModalProps) => {
 
             {open && (
                 <div
-                    className={`fixed inset-0 bg-black/50 flex items-center justify-center z-50 transition-opacity duration-200 ${
+                    className={`fixed inset-0 bg-overlay flex items-center justify-center z-50 transition-opacity duration-200 ${
                         visible ? 'opacity-100' : 'opacity-0'
                     }`}
                     onClick={close}
                 >
                     <div
-                        className={`bg-[#1a1a1a] rounded-xl p-2 md:p-6 min-w-80 max-w-lg w-full mx-4 transition-all duration-200 ${
+                        className={`bg-surface rounded-xl px-4 py-4 md:px-6 min-w-80 max-w-lg w-full mx-4 transition-all duration-200 ${
                             visible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
                         }`}
                         onClick={(e) => e.stopPropagation()}

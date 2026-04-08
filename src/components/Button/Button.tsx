@@ -13,7 +13,10 @@ export const Button = (props: ButtonProps) =>
 
     return(
         <button onClick={onClick} disabled={disabled} className={
-            `flex gap-4 items-center justify-center p-4 rounded-lg text-[#fff5ff] bg-[#916b8d] active:bg-[#916bad] disabled:opacity-50 disabled:pointer-events-none
+            `flex gap-4 items-center justify-center p-4 rounded-lg text-text bg-primary 
+            hover:text-accent active:bg-primary-active active:text-accent 
+            transition-colors duration-200
+            disabled:opacity-50 disabled:pointer-events-none
             ${className}`
         }>
             {leftAddon}

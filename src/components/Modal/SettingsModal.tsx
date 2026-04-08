@@ -36,8 +36,8 @@ export const SettingsModal = ({ settings, onChange, disabled }: SettingsModalPro
     return (
         <Modal
             trigger={
-                <Button onClick={() => {}} className="w-fit bg-gray-600" disabled={disabled}>
-                    <Settings height={30} width={30} />
+                <Button onClick={() => {}} className="w-fit bg-accent! text-primary! active:text-text-dark! active:bg-muted! hover:text-text-dark!" disabled={disabled}>
+                    <Settings size={30} strokeWidth={3}/>
                 </Button>
             }
             onOpen={() => setLocal(settings)}

@@ -8,6 +8,7 @@ import { Eye, X } from 'lucide-react';
 import { AnimatedLabel } from './components/Button/AnimatedLabel';
 import { defaultSettings, SettingsModal } from './components/Modal/SettingsModal';
 import type { GenerateSettings } from './components/Modal/SettingsModal';
+import { Title } from './components/Title/Title';
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
   const [password, setPassword] = useState('');
   const [settings, setSettings] = useState<GenerateSettings>(defaultSettings);
   const clearTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [titleTrigger, setTitleTrigger] = useState(0);
 
   const handleEditMasterKey = (value: string) =>
   {
@@ -40,13 +42,14 @@ function App() {
   const generatePassword = async () =>
   {
     if (masterKeyError || keyError || !masterKey || !key) {
-      const msg = !masterKey || !key ? 'Fill fields' : 'Fix errors first';
+      const msg = !masterKey || !key ? 'Fill fields' : 'Fix errors';
       setErrorMsg(msg);
       if (errorTimer.current) clearTimeout(errorTimer.current);
       errorTimer.current = setTimeout(() => setErrorMsg(''), 5_000);
       return;
     }
     setLoading(true);
+    setTitleTrigger(prev => prev + 1);
     const pass = await new Promise<string>((resolve) => {
       const worker = new GenerateWorker();
       worker.onmessage = (e: MessageEvent<string>) => {
@@ -76,49 +79,56 @@ function App() {
 
 
   return (
-    <div className="bg-[#000000] min-h-screen w-full flex flex-col gap-12 justify-center p-8 md:px-28 lg:px-64 2xl:px-96">
-      <div className='w-full flex flex-col gap-6 justify-center'>
+    <div className="bg-bg min-h-screen w-full flex flex-col justify-center py-8 px-4 md:px-28 lg:px-64 xl:px-60">
+
+      <Title trigger={titleTrigger} />
+
+      <div className='flex flex-col gap-12 justify-center py-6 px-4 bg-surface rounded-xl md:p-8'>
+        <div className='w-full flex flex-col gap-6 justify-center'>
+          <Input
+            value={masterKey}
+            onChange={handleEditMasterKey}
+            placeholder='Master password*'
+            type='password'
+            rightAddon={['visible', 'clear']}
+            error={masterKeyError}
+            disabled={loading}
+          />
+          <Input
+            value={key}
+            onChange={handleEditKey}
+            placeholder='Key*'
+            error={keyError}
+            disabled={loading}
+            rightAddon='clear'
+          />
+          <Input
+            value={tag}
+            onChange={handleEditTag}
+            placeholder='Tag'
+            disabled={loading}
+            rightAddon='clear'
+          />
+        </div>
+
+        <div className='flex gap-2 w-full'>
+          <Button onClick={generatePassword} className='w-full'>
+            {loading ? <Eye size={30} strokeWidth={3} className='animate-spin text-accent'/> : <AnimatedLabel text={errorMsg || 'Generate'} error={!!errorMsg} />}
+          </Button>
+          <SettingsModal settings={settings} onChange={setSettings} disabled={loading} />
+          <Button onClick={handleReset} className='w-fit bg-accent! text-primary! active:text-text-dark! active:bg-muted! hover:text-text-dark!' disabled={loading}>
+            <X size={30} strokeWidth={3}/>
+          </Button>
+        </div>
+
         <Input
-          value={masterKey}
-          onChange={handleEditMasterKey}
-          placeholder='Master password*'
-          type='password'
-          rightAddon='visible'
-          error={masterKeyError}
-          disabled={loading}
-        />
-        <Input
-          value={key}
-          onChange={handleEditKey}
-          placeholder='Key*'
-          error={keyError}
-          disabled={loading}
-        />
-        <Input
-          value={tag}
-          onChange={handleEditTag}
-          placeholder='Tag'
-          disabled={loading}
+          value={password}
+          placeholder='Wait ur password'
+          rightAddon='copy'
+          disabled
+          className=''
         />
       </div>
-
-      <div className='flex gap-2 w-full'>
-        <Button onClick={handleReset} className='w-fit bg-gray-600' disabled={loading}>
-          <X height={30} width={30}/>
-        </Button>
-        <Button onClick={generatePassword} className='w-full'>
-          {loading ? <Eye height={30} width={30} className='animate-spin' /> : <AnimatedLabel text={errorMsg || 'Generate'} />}
-        </Button>
-        <SettingsModal settings={settings} onChange={setSettings} disabled={loading} />
-      </div>
-
-      <Input
-        value={password}
-        placeholder='Wait ur password'
-        rightAddon='copy'
-        disabled
-        className=''
-      />
 
       
     </div>
