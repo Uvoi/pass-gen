@@ -5,6 +5,7 @@ import { Button } from './components/Button/Button';
 import GenerateWorker from './components/Generate/generate.worker.ts?worker';
 import type { ArgonParams } from './components/Generate/generate';
 import { Eye, X } from 'lucide-react';
+import { AnimatedLabel } from './components/Button/AnimatedLabel';
 import { defaultSettings, SettingsModal } from './components/Modal/SettingsModal';
 import type { GenerateSettings } from './components/Modal/SettingsModal';
 
@@ -106,7 +107,7 @@ function App() {
           <X height={30} width={30}/>
         </Button>
         <Button onClick={generatePassword} className='w-full'>
-          {loading ? <Eye height={30} width={30} className='animate-spin' /> : errorMsg || 'Generate'}
+          {loading ? <Eye height={30} width={30} className='animate-spin' /> : <AnimatedLabel text={errorMsg || 'Generate'} />}
         </Button>
         <SettingsModal settings={settings} onChange={setSettings} disabled={loading} />
       </div>
