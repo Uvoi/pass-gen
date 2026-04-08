@@ -8,6 +8,7 @@ A stateless password generator that derives unique, reproducible passwords from 
 * Deterministic password generation
 * Argon2-based derivation
 * Fully client-side
+* Customizable generation settings (Iterations, Memory, Password length)
 
 ---
 
@@ -16,7 +17,8 @@ A stateless password generator that derives unique, reproducible passwords from 
 1. Enter your **master password**
 2. Enter a **key**
 3. (Optional) add a **tag**
-4. Click **Generate**
+4. (Optional) adjust **generation settings**
+5. Click **Generate**
 
 ---
 
@@ -31,3 +33,16 @@ A stateless password generator that derives unique, reproducible passwords from 
 ## Tech
 
 React • TypeScript • Vite • Tailwind • Argon2
+
+---
+
+## Screenshots
+
+### Main Interface
+![Main Interface](src/assets/app/main.png)
+
+### Generated password
+![Generated password](src/assets/app/generated.png)
+
+### Generation Settings
+![Settings](src/assets/app/settings.png)
