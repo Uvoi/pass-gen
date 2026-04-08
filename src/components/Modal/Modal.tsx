@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../Button/Button";
 import { X } from "lucide-react";
 
@@ -11,13 +11,25 @@ type ModalProps = {
 
 export const Modal = ({ trigger, children, onOpen, disabled }: ModalProps) => {
     const [open, setOpen] = useState(false);
+    const [visible, setVisible] = useState(false);
 
     const handleOpen = () => {
         onOpen?.();
         setOpen(true);
+        requestAnimationFrame(() => setVisible(true));
     };
 
-    const close = () => setOpen(false);
+    const close = () => {
+        setVisible(false);
+        setTimeout(() => setOpen(false), 200);
+    };
+
+    useEffect(() => {
+        if (!open) return;
+        const handler = (e: KeyboardEvent) => e.key === 'Escape' && close();
+        window.addEventListener('keydown', handler);
+        return () => window.removeEventListener('keydown', handler);
+    }, [open]);
 
     return (
         <>
@@ -25,11 +37,15 @@ export const Modal = ({ trigger, children, onOpen, disabled }: ModalProps) => {
 
             {open && (
                 <div
-                    className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+                    className={`fixed inset-0 bg-black/50 flex items-center justify-center z-50 transition-opacity duration-200 ${
+                        visible ? 'opacity-100' : 'opacity-0'
+                    }`}
                     onClick={close}
                 >
                     <div
-                        className="bg-[#1a1a1a] rounded-xl p-6 min-w-80 max-w-lg w-full mx-4"
+                        className={`bg-[#1a1a1a] rounded-xl p-2 md:p-6 min-w-80 max-w-lg w-full mx-4 transition-all duration-200 ${
+                            visible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+                        }`}
                         onClick={(e) => e.stopPropagation()}
                     >
                         <div className="flex justify-end mb-12">

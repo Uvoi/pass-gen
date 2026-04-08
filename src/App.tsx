@@ -75,7 +75,7 @@ function App() {
 
 
   return (
-    <div className="bg-[#000000] min-h-screen w-full flex flex-col gap-12 justify-center p-8">
+    <div className="bg-[#000000] min-h-screen w-full flex flex-col gap-12 justify-center p-8 md:px-28 lg:px-64 2xl:px-96">
       <div className='w-full flex flex-col gap-6 justify-center'>
         <Input
           value={masterKey}
